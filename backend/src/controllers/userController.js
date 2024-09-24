@@ -80,7 +80,9 @@ const register = asyncHandler(async (req, res) => {
     },
   });
 
-  const createdUser = await User.findById(user._id);
+  const createdUser = await User.findById(user._id)
+    .select("-password")
+    .select("-phone");
 
   if (!createdUser) {
     throw new ApiError(500, "unable to register");
@@ -94,8 +96,8 @@ const register = asyncHandler(async (req, res) => {
       Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    // secure: true,
-    // sameSite: "None",
+    secure: true,
+    sameSite: "None",
   };
 
   return res
@@ -140,13 +142,13 @@ const login = asyncHandler(async (req, res) => {
       Date.now() + process.env.COOKIE_EXPIRY * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    // secure: true,
-    // sameSite: "None",
+    secure: true,
+    sameSite: "None",
   };
 
   return res
     .status(201)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("refreshToken", refreshToken, options, accessToken)
     .json(
       new ApiResponse(
         200,
@@ -173,10 +175,4 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "cookie ckear"));
 });
 
-
-export {
-  refresh,
-  register,
-  login,
-  logout,
-}
+export { refresh, register, login, logout };

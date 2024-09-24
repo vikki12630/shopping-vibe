@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import { useDispatch } from 'react-redux'
 import { setUser, setToken } from "../storeAndSlices/authSlice"
@@ -8,6 +8,7 @@ const Login = () => {
   const emailRef = useRef();
   const errRef = useRef();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,13 +24,14 @@ const Login = () => {
         withCredentials: true
       }
       const response = await axios.post('/api/v1/users/login', { email, password }, config)
-      console.log(response)
+      // console.log(response)
       const accessToken = response?.data?.data.accessToken
       const user = response?.data?.data.signedInUser
       dispatch(setUser(user))
       dispatch(setToken({accessToken}))
       setEmail('')
       setPassword('')
+      navigate('/')
     } catch (error) {
       console.log(error)
     }
@@ -81,7 +83,7 @@ const Login = () => {
           className='text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl  font-medium rounded-lg text-2xl  text-center me-2 mb-2 mt-4 h-16 cursor-pointer'
         >login</button>
       </form>
-      <Link className='text-lg' to={"/register"}>Don't have an account? Sign Up</Link>
+      <Link className='text-lg' to={"/register"}>Don't have an account? Register</Link>
     </div>
   )
 }
