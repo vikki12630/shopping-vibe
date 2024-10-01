@@ -1,6 +1,12 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js"
-import { login, logout, refresh, register } from "../controllers/userController.js";
+import {
+  login,
+  logout,
+  refresh,
+  register,
+  getCurrentUser,
+} from "../controllers/userController.js";
 
 
 
@@ -13,6 +19,7 @@ router.route("/login").post(login)
 
 // secure route
 router.route("/logout").post(verifyJWT, logout);
+router.route("/getCurrentUser").post(verifyJWT, getCurrentUser);
 
 
 

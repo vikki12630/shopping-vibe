@@ -24,7 +24,6 @@ const Login = () => {
         withCredentials: true
       }
       const response = await axios.post('/api/v1/users/login', { email, password }, config)
-      // console.log(response)
       const accessToken = response?.data?.data.accessToken
       const user = response?.data?.data.signedInUser
       dispatch(setUser(user))

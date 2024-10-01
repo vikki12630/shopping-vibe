@@ -64,8 +64,10 @@ const register = asyncHandler(async (req, res) => {
   if (existingUser) {
     throw new ApiError(401, "user already exist with this email");
   }
+  const role = "user"
 
   const user = await User.create({
+    role,
     email,
     name,
     lastname,
@@ -175,4 +177,13 @@ const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "cookie ckear"));
 });
 
-export { refresh, register, login, logout };
+// get current user
+const getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "user fetched successfully"));
+});
+
+export { refresh, register, login, logout, getCurrentUser };

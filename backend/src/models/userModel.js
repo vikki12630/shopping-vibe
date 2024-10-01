@@ -48,6 +48,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    role:{
+      type: String,
+      value: "user"
+    },
     password: {
       type: String,
       required: true,

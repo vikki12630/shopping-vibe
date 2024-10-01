@@ -8,13 +8,14 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth)
+  console.log(user?.user?.role)
 
-  const logoutUser = async() => {
+  const logoutUser = async () => {
     try {
       const response = await axiosPrivate.post('/api/v1/users/logout')
       dispatch(logout())
-      console.log(response)
+      // console.log(response)
     } catch (error) {
       console.log(error)
     }
@@ -34,7 +35,8 @@ const Navbar = () => {
         <Link to={"/men"}>MENS</Link>
         <Link to={"/women"}>WOMENS</Link>
         <Link to={"/kids"}>KIDS</Link>
-        {user ? <button onClick={logoutUser}>LOGOUT</button> : <button onClick={loginUser}>LOGIN</button>}
+        {user?.user?.role === "admin" ? <Link to={"/admin"}>Admin</Link> : <></>}
+        {user.isAuthenticated ? [<Link to={"/settings"}>SETTINGS</Link>, <button onClick={logoutUser}>LOGOUT</button>] : <button onClick={loginUser}>LOGIN</button>}
       </div>
     </section>
   )
